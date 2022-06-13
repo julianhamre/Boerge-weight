@@ -6,45 +6,71 @@ Created on Wed Mar 16 19:01:46 2022
 @author: julianhamre
 """
 from matplotlib import pyplot as plt
-from timeit import default_timer as tmi
 import numpy as np
 import sys 
 import os
 sys.path.append(os.path.abspath("../Polynomial"))
 import poly_tools as pt
 
-
-def date_to_day_number(date):
+class date():
     year_list = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     leap_year_list = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     
-    year_number = int(date[4:6])
-    year_value = 0
-    for i in range(0, year_number):
-        if i % 4 == 0:
-            year_value += 366
-        else:
-            year_value += 365
+    def is_string(self):
+        if not (type(self.date) is str):
+            raise TypeError("date must be string")
         
-    month_number = int(date[2:4])
-    month_value = 0
-    month_counter = 0
-    if year_number % 4 == 0:
-        for i in range(0, month_number - 1):
-            month_value += leap_year_list[month_counter]
-            month_counter +=1
-    else:
-        for i in range(0, month_number - 1):
-            month_value += year_list[month_counter]
-            month_counter += 1
-        
-    day_value = int(date[0:2])
+    def correct_length(self):
+        length = len(self.date)
+        if length == 6:
+            raise IndexError("date must have 6 characters in the ddmmyy format, got {length} characters")
     
-    return year_value + month_value + day_value 
+    def correct_date_index(day_numb, month_numb, year_list):
+        if not (month_numb >= 1 and month_numb <= 12):
+            raise ValueError(f"month {month_numb} is invalid")
+        if not (day_numb >= 1 and day_numb <= year_list[month_numb - 1]):
+            raise ValueError(f"day {day_numb} in month {month_numb} is invalid")
+    
+    def __init__(self, date):
+        self.date = date
+        
+        self.is_string()
+        self.correct_length()
+        
+        self.day_numb = int(date[0:2])
+        self.month_numb = int(date[2:4])
+        self.year_numb = int(date[4:6])
+        
+        self.correct_date_index(self.day_numb, self.month_numb, year_list)
+        
+        
+    def date_to_day_number(self):
+        year_value = 0
+        for i in range(0, self.year_numb):
+            if i % 4 == 0:
+                year_value += 366
+            else:
+                year_value += 365
+            
+        month_value = 0
+        month_counter = 0
+        
+        if self.year_numb % 4 == 0:
+            for i in range(0, self.month_numb - 1):
+                month_value += leap_year_list[month_counter]
+                month_counter +=1
+        else:
+            for i in range(0, self.month_number - 1):
+                month_value += year_list[month_counter]
+                month_counter += 1
+            
+        day_value = self.day_numb
+        
+        return year_value + month_value + day_value 
 
 def all_days_from_first(dates):
     numbs = []
-    first_date = date_to_day_number(dates[0])
+    first_date = dates[0].date_to_day_number()
     for date in dates:
         numbs.append(date_to_day_number(date) - first_date)
     return numbs
@@ -113,7 +139,7 @@ def plot_weight_graph():
     else:
         expected_hit = int(trend.evaluate(x[-1]))
         
-    trend = pt.polynomial(trend.get_coef())         #rewriting polynomial with coefficients as list (not np.narray)
+    trend.coef_as_list()         
     trend.add_constant(-expected_hit)
     days_to_hit = pt.pol_solve(trend, x[-1]) - x[-1]
     t = plt.text(0, 75.23, f"Børge is expected to\nweigh {expected_hit} kg in {round(days_to_hit)} days")
@@ -133,7 +159,6 @@ def savefig_test(fig):
     fig.savefig("Graph_test_save.pdf", format="pdf")
 
 
-start = tmi()
 
 
 #plot_weight_graph()
@@ -150,10 +175,16 @@ if not is_equal():
         print("rewrite and upload cancelled")
 
 """
-end = tmi()
 
+year_list = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+leap_year_list = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-#print(f"run in {round(end - start, 4)} seconds")
+date = "301323"
+dn = int(date[0:2])
+mn = int(date[2:4])
+yn = int(date[4:6])
+
+correct_date_index(dn, mn, year_list)
 
 
 
