@@ -14,7 +14,7 @@ sys.path.append(os.path.abspath("../Polynomial"))
 import poly_tools as pt
 
 
-def date_number(date):
+def date_to_day_number(date):
     year_list = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     leap_year_list = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     
@@ -42,12 +42,11 @@ def date_number(date):
     
     return year_value + month_value + day_value 
 
-
-def strings_to_date_numbs(dates):
+def all_days_from_first(dates):
     numbs = []
-    first_date = date_number(dates[0])
+    first_date = date_to_day_number(dates[0])
     for date in dates:
-        numbs.append(date_number(date) - first_date)
+        numbs.append(date_to_day_number(date) - first_date)
     return numbs
 
 
@@ -92,7 +91,7 @@ def plot_weight_graph():
         first_date = x[0]
     #print(f"dates: {x}")
     #print(f"weights: {y}")
-    x = strings_to_date_numbs(x)
+    x = all_days_from_first(x)
 
     plt.grid(color="grey", linestyle="--")
     plt.xlabel(f"days after {first_date}")
@@ -102,18 +101,19 @@ def plot_weight_graph():
     
     degree = 2
     trend = pt.polynomial(np.polyfit(x, y, degree))
+    print(type(np.polyfit(x, y, degree)))
     x_trend = np.linspace(x[0], x[-1], 1000)
     plt.plot(x, y, linewidth=3, label="Weight graph")
     plt.plot(x_trend, trend.evaluate(x_trend), label=f"Trend polynomial, deg. {degree}")
     plt.legend(loc="upper left")
     
-    d_trend = trend.differenciate()
+    d_trend = trend.differentiate()
     if d_trend.evaluate(x_trend[-1]) > 0:
         expected_hit = int(trend.evaluate(x[-1])) + 1
     else:
         expected_hit = int(trend.evaluate(x[-1]))
         
-    trend = pt.polynomial(trend.get_coefficients())         #rewriting polynomial with coefficients as list (not np.narray)
+    trend = pt.polynomial(trend.get_coef())         #rewriting polynomial with coefficients as list (not np.narray)
     trend.add_constant(-expected_hit)
     days_to_hit = pt.pol_solve(trend, x[-1]) - x[-1]
     t = plt.text(0, 75.23, f"Børge is expected to\nweigh {expected_hit} kg in {round(days_to_hit)} days")
@@ -139,7 +139,7 @@ start = tmi()
 #plot_weight_graph()
 #savefig_test(plot_weight_graph())
 
-
+"""
 if not is_equal():
     fig = plot_weight_graph()
     upload_confirmation = input("Do you want to rewrite the current graph file, weight_control.txt and upload \nthe new graph file to github?\n\nAnswer yes or no: ")
@@ -149,7 +149,7 @@ if not is_equal():
     else:
         print("rewrite and upload cancelled")
 
-
+"""
 end = tmi()
 
 
