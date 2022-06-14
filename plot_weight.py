@@ -22,14 +22,20 @@ class date():
         
     def correct_length(self):
         length = len(self.date)
-        if length == 6:
+        if not length == 6:
             raise IndexError("date must have 6 characters in the ddmmyy format, got {length} characters")
+            
+    def correct_year_list(self):
+        if self.year_numb % 4 == 0:
+            return self.leap_year_list
+        else:
+            return self.year_list
     
-    def correct_date_index(day_numb, month_numb, year_list):
-        if not (month_numb >= 1 and month_numb <= 12):
-            raise ValueError(f"month {month_numb} is invalid")
-        if not (day_numb >= 1 and day_numb <= year_list[month_numb - 1]):
-            raise ValueError(f"day {day_numb} in month {month_numb} is invalid")
+    def correct_date_index(self, yl):
+        if not (self.month_numb >= 1 and self.month_numb <= 12):
+            raise ValueError(f"month {self.month_numb} is invalid")
+        if not (self.day_numb >= 1 and self.day_numb <= yl[self.month_numb - 1]):
+            raise ValueError(f"day {self.day_numb} in month {self.month_numb} is invalid")
     
     def __init__(self, date):
         self.date = date
@@ -41,7 +47,9 @@ class date():
         self.month_numb = int(date[2:4])
         self.year_numb = int(date[4:6])
         
-        self.correct_date_index(self.day_numb, self.month_numb, year_list)
+        yl = self.correct_year_list()
+        
+        self.correct_date_index(yl)
         
         
     def date_to_day_number(self):
@@ -57,11 +65,11 @@ class date():
         
         if self.year_numb % 4 == 0:
             for i in range(0, self.month_numb - 1):
-                month_value += leap_year_list[month_counter]
+                month_value += self.leap_year_list[month_counter]
                 month_counter +=1
         else:
-            for i in range(0, self.month_number - 1):
-                month_value += year_list[month_counter]
+            for i in range(0, self.month_numb - 1):
+                month_value += self.year_list[month_counter]
                 month_counter += 1
             
         day_value = self.day_numb
@@ -69,11 +77,11 @@ class date():
         return year_value + month_value + day_value 
 
 def all_days_from_first(dates):
-    numbs = []
+    days = []
     first_date = dates[0].date_to_day_number()
     for date in dates:
-        numbs.append(date_to_day_number(date) - first_date)
-    return numbs
+        days.append(date.date_to_day_number() - first_date)
+    return days
 
 
 def remove_space(strings):
@@ -176,15 +184,14 @@ if not is_equal():
 
 """
 
-year_list = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-leap_year_list = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-date = "301323"
-dn = int(date[0:2])
-mn = int(date[2:4])
-yn = int(date[4:6])
+n = "310101"
+d = date(n)
 
-correct_date_index(dn, mn, year_list)
+print(d.date_to_day_number())
+
+
+
 
 
 
