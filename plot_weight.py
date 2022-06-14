@@ -17,13 +17,14 @@ class date():
     leap_year_list = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     
     def is_string(self):
-        if not (type(self.date) is str):
-            raise TypeError("date must be string")
+        tp = type(self.date)
+        if not (tp is str):
+            raise TypeError(f"date must be a string, got {tp}")
         
     def correct_length(self):
         length = len(self.date)
         if not length == 6:
-            raise IndexError("date must have 6 characters in the ddmmyy format, got {length} characters")
+            raise IndexError(f"date must have 6 characters in the ddmmyy format, got {length} characters")
             
     def correct_year_list(self):
         if self.year_numb % 4 == 0:
@@ -66,7 +67,7 @@ class date():
         if self.year_numb % 4 == 0:
             for i in range(0, self.month_numb - 1):
                 month_value += self.leap_year_list[month_counter]
-                month_counter +=1
+                month_counter += 1
         else:
             for i in range(0, self.month_numb - 1):
                 month_value += self.year_list[month_counter]
@@ -185,7 +186,7 @@ if not is_equal():
 """
 
 
-n = "310101"
+n = "301050"
 d = date(n)
 
 print(d.date_to_day_number())
