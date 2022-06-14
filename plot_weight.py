@@ -150,14 +150,12 @@ def plot_weight_graph():
     
 
 def rewrite_and_upload(fig, message):
-    fig.savefig("Boerge_weight_graph.pdf", format="pdf")
+    fig.savefig("weight_graph.pdf", format="pdf")
     os.system("cp /Users/julianhamre/icloud/delt_med_julian/weight_data.txt weight_control.txt")
-    os.system(f"git add Boerge_weight_graph.pdf; git add weight_control.txt; git commit -m '{message}'; git push")
+    os.system(f"git add weight_graph.pdf; git add weight_control.txt; git commit -m '{message}'; git push")
     
 def savefig_test(fig):
     fig.savefig("Graph_test_save.pdf", format="pdf")
-
-
 
 
 #plot_weight_graph()
