@@ -32,10 +32,10 @@ class date():
         else:
             return self.year_list
     
-    def correct_date_index(self, yl):
+    def correct_date_index(self, year):
         if not (self.month_numb >= 1 and self.month_numb <= 12):
             raise ValueError(f"month {self.month_numb} is invalid")
-        if not (self.day_numb >= 1 and self.day_numb <= yl[self.month_numb - 1]):
+        if not (self.day_numb >= 1 and self.day_numb <= year[self.month_numb - 1]):
             raise ValueError(f"day {self.day_numb} in month {self.month_numb} is invalid")
     
     def __init__(self, date):
@@ -48,9 +48,9 @@ class date():
         self.month_numb = int(date[2:4])
         self.year_numb = int(date[4:6])
         
-        yl = self.correct_year_list()
+        year = self.correct_year_list()
         
-        self.correct_date_index(yl)
+        self.correct_date_index(year)
         
         
     def date_to_day_number(self):
@@ -63,16 +63,10 @@ class date():
             
         month_value = 0
         month_counter = 0
+        for i in range(0, self.month_numb - 1):
+            month_value += self.correct_year_list()[month_counter]
+            month_counter += 1
         
-        if self.year_numb % 4 == 0:
-            for i in range(0, self.month_numb - 1):
-                month_value += self.leap_year_list[month_counter]
-                month_counter += 1
-        else:
-            for i in range(0, self.month_numb - 1):
-                month_value += self.year_list[month_counter]
-                month_counter += 1
-            
         day_value = self.day_numb
         
         return year_value + month_value + day_value 
