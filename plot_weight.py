@@ -91,7 +91,7 @@ def remove_space(strings):
     return space_removed
         
 def is_equal():
-    with open("/Users/julianhamre/icloud/delt_med_julian/weight_data.txt") as f1, open("weight_control.txt") as f2:   #First path is spesificly for my computer, change when needed 
+    with open("/Users/julianhamre/icloud/delt_med_julian/weight_data.txt") as f1, open("weight_control.txt") as f2:   #First path is specificly for my computer, change when needed 
         f1 = remove_space(f1)
         f2 = remove_space(f2)
         if len(f1) != len(f2):
@@ -107,7 +107,7 @@ def is_equal():
     return True    
     
 def plot_weight_graph():
-    with open("/Users/julianhamre/icloud/delt_med_julian/weight_data.txt") as f:      #Path spesific
+    with open("/Users/julianhamre/icloud/delt_med_julian/weight_data.txt") as f:      #Path specific
         lines = f.readlines()
         x = []
         y = []
@@ -151,7 +151,7 @@ def plot_weight_graph():
 
 def rewrite_and_upload(fig, message):
     fig.savefig("weight_graph.pdf", format="pdf")
-    os.system("cp /Users/julianhamre/icloud/delt_med_julian/weight_data.txt weight_control.txt")
+    os.system("cp /Users/julianhamre/icloud/delt_med_julian/weight_data.txt weight_control.txt")               #Path specific
     os.system(f"git add weight_graph.pdf; git add weight_control.txt; git commit -m '{message}'; git push")
     
 def savefig_test(fig):
@@ -164,7 +164,7 @@ def savefig_test(fig):
 
 if not is_equal():
     fig = plot_weight_graph()
-    upload_confirmation = input("Do you want to rewrite the current graph file, weight_control.txt and upload \nthe new graph file to github?\n\nAnswer yes or no: ")
+    upload_confirmation = input("Do you want to rewrite the current graph file, weight_control.txt and upload the new graph file to github?\n\nAnswer yes or no: ")
     if upload_confirmation == "yes":
         commit_message = input("Write new commit message: ")
         rewrite_and_upload(fig, commit_message)
