@@ -18,10 +18,11 @@ class TestDate(unittest.TestCase):
             day_numb = dm.date(date_strings[i]).date_to_day_number()
             self.assertEqual(day_numb, correct_day_numbs[i])
     
-    
+    def test_check_if_string(self):
+        with self.assertRaises(TypeError):
+            dm.date(6)
 
             
 
 if __name__ == "__main__":
     unittest.main()
-    
