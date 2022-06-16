@@ -22,7 +22,14 @@ class TestDate(unittest.TestCase):
         with self.assertRaises(TypeError):
             dm.date(6)
 
+    def test_check_length(self):
+        with self.assertRaises(IndexError):
+            dm.date("3010206") 
+        try: 
+            dm.date("301020")
+        except IndexError:
+            self.fail("IndexError raised when date string had correct length")
             
-
+            
 if __name__ == "__main__":
     unittest.main()
