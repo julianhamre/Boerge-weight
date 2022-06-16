@@ -11,13 +11,12 @@ import date_module as dm
 
 class TestDate(unittest.TestCase):
     def test_date_to_day_number(self):
-        d1 = dm.date("010100").date_to_day_number()
-        d2 = dm.date("310310").date_to_day_number()
-        d3 = dm.date("311299").date_to_day_number()
-        
-        self.assertEqual(d1, 1)
-        self.assertEqual(d2, 3743)
-        self.assertEqual(d3, 36525)
+        date_strings = ["010100", "290220", "311299"]
+        correct_day_numbs = [1, 7365, 36525]
+
+        for i in range(0, len(date_strings)):
+            self.assertEqual(dm.date(date_strings[i]).date_to_day_number(), correct_day_numbs[i])
         
 if __name__ == "__main__":
     unittest.main()
+    
