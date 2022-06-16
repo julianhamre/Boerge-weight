@@ -15,8 +15,13 @@ class TestDate(unittest.TestCase):
         correct_day_numbs = [1, 7365, 36525]
 
         for i in range(0, len(date_strings)):
-            self.assertEqual(dm.date(date_strings[i]).date_to_day_number(), correct_day_numbs[i])
-        
+            day_numb = dm.date(date_strings[i]).date_to_day_number()
+            self.assertEqual(day_numb, correct_day_numbs[i])
+    
+    
+
+            
+
 if __name__ == "__main__":
     unittest.main()
     
