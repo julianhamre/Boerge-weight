@@ -38,10 +38,16 @@ class TestDate(unittest.TestCase):
             except ValueError:
                 self.fail("ValueError raised when date string had correct day and month")
         
-        incorrect_date_strings = ["101320", "320120", "310220", "290221"]
+        incorrect_date_strings = ["101320", "320120", "311120", "290221"]
         for s in incorrect_date_strings:
             with self.assertRaises(ValueError):
                 dm.date(s)
+
+    def test_correct_year_list(self):
+        d = dm.date("100115")
+        self.assertEqual(d.correct_year_list(), d.year_list)
+        d = dm.date("100116")
+        self.assertEqual(d.correct_year_list(), d.leap_year_list)
 
 
 if __name__ == "__main__":
