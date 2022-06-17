@@ -66,7 +66,7 @@ class date():
         return year_value + month_value + day_value 
 
 
-def all_days_from_first(dates):
+def dates_to_days_from_first_date(dates):
     days = []
     first_date = dates[0].date_to_day_number()
     for date in dates:

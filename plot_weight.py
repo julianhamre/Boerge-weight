@@ -52,7 +52,7 @@ def plot_weight_graph():
                 x.append(dm.date(data[0]))
                 y.append(float(data[1]))
         first_date = x[0].date
-    x = dm.all_days_from_first(x)
+    x = dm.dates_to_days_from_first_date(x)
 
     plt.grid(color="grey", linestyle="--")
     plt.xlabel(f"days after {first_date}")
@@ -105,19 +105,3 @@ if not is_equal():
         rewrite_and_upload(fig, commit_message)
     else:
         print("rewrite and upload cancelled")
-
-
-
-
-
-"""
-n = ["100100", "120100", "150100"]
-dn = []
-
-for i in n:
-    dn.append(date(i))
-
-a = all_days_from_first(dn)
-
-print(a)
-"""
