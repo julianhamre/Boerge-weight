@@ -24,12 +24,25 @@ class TestDate(unittest.TestCase):
 
     def test_check_length(self):
         with self.assertRaises(IndexError):
-            dm.date("3010206") 
+            dm.date("3010206")
         try: 
             dm.date("301020")
         except IndexError:
             self.fail("IndexError raised when date string had correct length")
-            
-            
+
+    def test_check_day_and_month(self):
+        correct_date_strings = ["101078", "310120", "290220", "310320"]
+        for s in correct_date_strings:
+            try:
+                dm.date(s)
+            except ValueError:
+                self.fail("ValueError raised when date string had correct day and month")
+        
+        incorrect_date_strings = ["101320", "320120", "310220", "290221"]
+        for s in incorrect_date_strings:
+            with self.assertRaises(ValueError):
+                dm.date(s)
+
+
 if __name__ == "__main__":
     unittest.main()
