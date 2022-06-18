@@ -32,12 +32,12 @@ class TestTxtCompare(unittest.TestCase):
             f.close()
         
     def test_is_equal(self):
-           self.edit_file_2("   ")
-           self.assertTrue(pw.is_equal(self.n1, self.n2))
-           self.edit_file_2("\n   ")
-           self.assertTrue(pw.is_equal(self.n1, self.n2))
-           self.edit_file_2("123456 70.0")
-           self.assertFalse(pw.is_equal(self.n1, self.n2))
+        self.edit_file_2("   ")
+        self.assertTrue(pw.is_equal(self.n1, self.n2))
+        self.edit_file_2("\n   ")
+        self.assertTrue(pw.is_equal(self.n1, self.n2))
+        self.edit_file_2("123456 70.0")
+        self.assertFalse(pw.is_equal(self.n1, self.n2))
        
     def tearDown(self):
         for n in [self.n1, self.n2]:
