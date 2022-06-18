@@ -92,16 +92,18 @@ def rewrite_and_upload(fig, message):
 def savefig_test(fig):
     fig.savefig("Graph_test_save.pdf", format="pdf")
 
+def check_and_run():
+    if not is_equal("/Users/julianhamre/icloud/delt_med_julian/weight_data.txt", "weight_control.txt"):             #Path specific
+        fig = plot_weight_graph()
+        upload_confirmation = input("Do you want to rewrite the current graph file, weight_control.txt and upload the new graph file to github?\n\nAnswer yes or no: ")
+        if upload_confirmation == "yes":
+            commit_message = input("Write new commit message: ")
+            rewrite_and_upload(fig, commit_message)
+        else:
+            print("rewrite and upload cancelled")
 
 #plot_weight_graph()
 #savefig_test(plot_weight_graph())
 
-
-if not is_equal("/Users/julianhamre/icloud/delt_med_julian/weight_data.txt", "weight_control.txt"):             #Path specific
-    fig = plot_weight_graph()
-    upload_confirmation = input("Do you want to rewrite the current graph file, weight_control.txt and upload the new graph file to github?\n\nAnswer yes or no: ")
-    if upload_confirmation == "yes":
-        commit_message = input("Write new commit message: ")
-        rewrite_and_upload(fig, commit_message)
-    else:
-        print("rewrite and upload cancelled")
+if __name__ == "__main__":
+    check_and_run()
