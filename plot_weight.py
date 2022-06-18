@@ -25,10 +25,10 @@ def remove_space(strings):
                 space_removed.append(element)
     return space_removed
         
-def is_equal():
-    with open("/Users/julianhamre/icloud/delt_med_julian/weight_data.txt") as f1, open("weight_control.txt") as f2:   #First path is specificly for my computer, change when needed 
-        f1 = remove_space(f1)
-        f2 = remove_space(f2)
+def is_equal(path1, path2):
+    with open(path1) as f1, open(path2) as f2:    
+        f1 = remove_space(f1.readlines())
+        f2 = remove_space(f2.readlines())
         if len(f1) != len(f2):
             print("number of elements changed in weight_data.txt")
             return False
@@ -93,11 +93,11 @@ def savefig_test(fig):
     fig.savefig("Graph_test_save.pdf", format="pdf")
 
 
-plot_weight_graph()
+#plot_weight_graph()
 #savefig_test(plot_weight_graph())
 
 
-if not is_equal():
+if not is_equal("/Users/julianhamre/icloud/delt_med_julian/weight_data.txt", "weight_control.txt"):             #Path specific
     fig = plot_weight_graph()
     upload_confirmation = input("Do you want to rewrite the current graph file, weight_control.txt and upload the new graph file to github?\n\nAnswer yes or no: ")
     if upload_confirmation == "yes":
