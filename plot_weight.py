@@ -61,7 +61,7 @@ def plot_weight_graph():
     plt.ylim(75, 78)
     
     degree = 2
-    trend = pt.polynomial(np.polyfit(x, y, degree))
+    trend = pt.polynomial(np.polyfit(x, y, degree).tolist())
     x_trend = np.linspace(x[0], x[-1], 1000)
     plt.plot(x, y, linewidth=3, label="Weight graph")
     plt.plot(x_trend, trend.evaluate(x_trend), label=f"Trend polynomial, deg. {degree}")
@@ -72,8 +72,7 @@ def plot_weight_graph():
         expected_hit = int(trend.evaluate(x[-1])) + 1
     else:
         expected_hit = int(trend.evaluate(x[-1]))
-        
-    trend.coef_as_list()         
+             
     trend.add_constant(-expected_hit)
     days_to_hit = pt.pol_solve(trend, x[-1]) - x[-1]
     t = plt.text(0, 75.23, f"Børge is expected to\nweigh {expected_hit} kg in {round(days_to_hit)} days")
@@ -102,7 +101,7 @@ def check_and_run():
         else:
             print("rewrite and upload cancelled")
 
-#plot_weight_graph()
+plot_weight_graph()
 #savefig_test(plot_weight_graph())
 
 if __name__ == "__main__":
