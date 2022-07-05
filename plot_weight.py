@@ -40,6 +40,9 @@ def is_equal(path1, path2):
             lncounter += 1
     print("no changes detected in weight_data.txt")
     return True    
+
+def is_sorted(d_numbs):
+    return all(d_numbs[i] <= d_numbs[i+1] for i in range(len(d_numbs) - 1))
     
 def plot_weight_graph():
     with open("/Users/julianhamre/icloud/delt_med_julian/weight_data.txt") as f:      #Path specific
@@ -53,6 +56,9 @@ def plot_weight_graph():
                 y.append(float(data[1]))
         first_date = x[0].date
     x = dm.dates_to_days_from_first_date(x)
+
+    if not is_sorted(x):
+        raise ValueError("dates are not in chronological order")
 
     plt.grid(color="grey", linestyle="--")
     plt.xlabel(f"days after {first_date}")
