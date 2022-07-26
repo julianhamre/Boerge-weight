@@ -7,6 +7,7 @@ Created on Wed Mar 16 19:01:46 2022
 """
 from matplotlib import pyplot as plt
 import numpy as np
+import copy
 import sys 
 import os
 sys.path.append(os.path.abspath("../Polynomial"))
@@ -33,7 +34,7 @@ def is_equal(path1, path2):
             print("number of elements changed in weight_data.txt")
             return False
         lncounter = 0
-        for i in f1:
+        for i in f1:   # set range loop later
             if i != f2[lncounter]:
                 print("changes made in weight_data.txt")
                 return False
@@ -41,74 +42,127 @@ def is_equal(path1, path2):
     print("no changes detected in weight_data.txt")
     return True    
 
-def is_sorted(d_numbs):
-    return all(d_numbs[i] <= d_numbs[i+1] for i in range(len(d_numbs) - 1))
-    
-def plot_weight_graph():
-    with open("/Users/julianhamre/icloud/delt_med_julian/weight_data.txt") as f:      #Path specific
-        lines = f.readlines()
-        x = []
-        y = []
-        for line in lines:
-            data = line.split()
-            if len(data) == 2:
-                x.append(dm.date(data[0]))
-                y.append(float(data[1]))
-        first_date = x[0].date
-    x = dm.dates_to_days_from_first_date(x)
 
-    if not is_sorted(x):
-        raise ValueError("dates are not in chronological order")
+class trend:
+    
+    def __init__(self, x_values, y_values):
+        self.__line_x = np.linspace(x_values[0], x_values[-1], 1000)
+        self.__degree = 2
+        self.__poly = pt.polynomial(np.polyfit(x_values, y_values, self.__degree).tolist())
+    
+    def get_poly_degree(self):
+        return self.__degree
+    
+    def get_line_points(self):
+        y = self.__poly.evaluate(self.__line_x)
+        return [self.__line_x, y]
+    
+    def current_weight(self):
+        return self.__poly.evaluate(self.__line_x[-1])
+    
+    def __next_expected_whole_kg(self):
+        diff_poly = self.__poly.differentiate()
+        next_kg = int(self.current_weight())
+        if diff_poly.evaluate(self.__line_x[-1]) > 0:
+            next_kg += 1
+        
+        return next_kg
 
-    plt.grid(color="grey", linestyle="--")
-    plt.xlabel(f"days after {first_date}")
-    plt.ylabel("weight in kg")
-    plt.title("Børge's weight graph")
-    plt.ylim(75, 78)
+    def __estimated_days_until_whole_kg(self):
+        poly = copy.copy(self.__poly)
+        poly.add_constant(- self.__next_expected_whole_kg())
+        days_until_weight = pt.pol_solve(poly, self.__line_x[-1]) - self.__line_x[-1]
+        
+        return days_until_weight
     
-    degree = 2
-    trend = pt.polynomial(np.polyfit(x, y, degree).tolist())
-    x_trend = np.linspace(x[0], x[-1], 1000)
-    plt.plot(x, y, linewidth=3, label="Weight graph")
-    plt.plot(x_trend, trend.evaluate(x_trend), label=f"Trend polynomial, deg. {degree}")
-    plt.legend(loc="upper left")
-    
-    d_trend = trend.differentiate()
-    if d_trend.evaluate(x_trend[-1]) > 0:
-        expected_hit = int(trend.evaluate(x[-1])) + 1
-    else:
-        expected_hit = int(trend.evaluate(x[-1]))
-             
-    trend.add_constant(-expected_hit)
-    days_to_hit = pt.pol_solve(trend, x[-1]) - x[-1]
-    t = plt.text(0, 75.23, f"Børge is expected to\nweigh {expected_hit} kg in {round(days_to_hit)} days")
-    t.set_bbox(dict(facecolor=[1, 0.6, 0], alpha=0.7))
-    
-    fig = plt.gcf()
-    plt.show()
-    return fig
+    def expected_weight_information(self):
+        days_remaining = round(self.__estimated_days_until_whole_kg())
+        upcomming_weight = self.__next_expected_whole_kg()
+        return f"Børge is expected to\nweigh {upcomming_weight} kg in {days_remaining} days"
     
 
-def rewrite_and_upload(fig, message):
+class plot:
+    __weight_data = "/Users/julianhamre/icloud/delt_med_julian/weight_data.txt"
+    
+    def get_weight_data_path(self):
+        return self.__weight_data
+    
+    def __init__(self):
+        self.__fig = plt.figure()
+        self.__ax = self.__fig.add_subplot()
+        
+        self.__set_point_values()
+        self.__set_layout()
+        self.__plot_data_graph()
+        self.__plot_trend_elements()
+        self.__ax.legend(loc="upper left")
+    
+    def __is_sorted(self, numbs):
+        return all(numbs[i] <= numbs[i+1] for i in range(len(numbs) - 1))
+    
+    def __set_point_values(self):
+        with open(self.__weight_data) as f:      
+            lines = f.readlines()
+            x = []
+            y = []
+            for line in lines:
+                data = line.split()
+                if len(data) == 2:
+                    x.append(dm.date(data[0]))
+                    y.append(float(data[1]))
+    
+            self.__first_date = x[0].date
+            
+        x = dm.dates_to_days_from_first_date(x)
+        if not self.__is_sorted(x):
+            raise ValueError("dates are not in chronological order")
+
+        self.__x = x
+        self.__y = y
+        
+    def __set_layout(self):
+        self.__ax.grid(color="grey", linestyle="--")
+        self.__ax.set_xlabel(f"days after {self.__first_date}")
+        self.__ax.set_ylabel("weight in kg")
+        self.__ax.title.set_text("Børge's weight graph")
+        self.__ax.set_ylim(75, 78)
+    
+    def __plot_data_graph(self):
+        self.__ax.plot(self.__x, self.__y, linewidth=3, label="Weight graph")
+    
+    def __plot_trend_elements(self):
+        tr = trend(self.__x, self.__y)
+        line_points = tr.get_line_points()
+        self.__ax.plot(line_points[0], line_points[1], label=f"Trend polynomial, deg. {tr.get_poly_degree()}")
+        
+        text = self.__ax.text(0, 75.23, tr.expected_weight_information())
+        text.set_bbox(dict(facecolor=[1, 0.6, 0], alpha=0.7))
+        
+    def get_fig(self):
+        return self.__fig
+    
+
+def rewrite_and_upload(plot, message):
+    fig = plot.get_fig()
     fig.savefig("weight_graph.pdf", format="pdf")
-    os.system("cp /Users/julianhamre/icloud/delt_med_julian/weight_data.txt weight_control.txt")               #Path specific
+    os.system("cp {plot.get_weight_data_path()} weight_control.txt")               
     os.system(f"git add weight_graph.pdf; git add weight_control.txt; git commit -m '{message}'; git push")
     
-def savefig_test(fig):
+def savefig_test(plot):
+    fig = plot.get_fig()
     fig.savefig("Graph_test_save.pdf", format="pdf")
 
 def check_and_run():
-    if not is_equal("/Users/julianhamre/icloud/delt_med_julian/weight_data.txt", "weight_control.txt"):             #Path specific
-        fig = plot_weight_graph()
-        upload_confirmation = input("Do you want to rewrite the current graph file, weight_control.txt and upload the new graph file to github?\n\nAnswer yes or no: ")
+    pl = plot()
+    if not is_equal(pl.get_weight_data_path(), "weight_control.txt"):
+        plt.show()
+        upload_confirmation = input("Do you want to rewrite the current graph file and weight_control.txt, commit and upload the files to github?\n\nAnswer yes to continue: ")
         if upload_confirmation == "yes":
             commit_message = "new measurement"
-            rewrite_and_upload(fig, commit_message)
+            rewrite_and_upload(pl, commit_message)
         else:
             print("rewrite and upload cancelled")
 
-plot_weight_graph()
-#savefig_test(plot_weight_graph())
 
 if __name__ == "__main__":
     check_and_run()
