@@ -145,7 +145,7 @@ class plot:
 def rewrite_and_upload(plot, message):
     fig = plot.get_fig()
     fig.savefig("weight_graph.pdf", format="pdf")
-    os.system("cp {plot.get_weight_data_path()} weight_control.txt")               
+    os.system(f"cp {plot.get_weight_data_path()} weight_control.txt")               
     os.system(f"git add weight_graph.pdf; git add weight_control.txt; git commit -m '{message}'; git push")
     
 def savefig_test(plot):
