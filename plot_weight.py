@@ -111,7 +111,7 @@ class plot:
                     x.append(dm.date(data[0]))
                     y.append(float(data[1]))
     
-            self.__first_date = x[0].date
+            self.__first_date = x[0]
             
         x = dm.dates_to_days_from_first_date(x)
         if not self.__is_sorted(x):
@@ -122,7 +122,7 @@ class plot:
         
     def __set_layout(self):
         self.__ax.grid(color="grey", linestyle="--")
-        self.__ax.set_xlabel(f"days after {self.__first_date}")
+        self.__ax.set_xlabel(f"days after {self.__first_date.get_full_format()}")
         self.__ax.set_ylabel("weight in kg")
         self.__ax.title.set_text("Børge's weight graph")
         self.__ax.set_ylim(75, 78)
