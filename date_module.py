@@ -57,7 +57,7 @@ class date():
         full_format = f"{month_names[self.__month_numb - 1]} {self.__day_numb}, 20{year}"
         return full_format
         
-    def date_to_day_number(self):
+    def total_days(self):
         year_value = 0
         for i in range(0, self.__year_numb):
             if i % 4 == 0:
@@ -76,9 +76,9 @@ class date():
         return year_value + month_value + day_value 
 
 
-def dates_to_days_from_first_date(dates):
+def days_from_first_date(dates):
     days = []
-    first_date = dates[0].date_to_day_number()
+    first_date = dates[0].total_days()
     for date in dates:
-        days.append(date.date_to_day_number() - first_date)
+        days.append(date.total_days() - first_date)
     return days
