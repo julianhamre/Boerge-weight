@@ -66,10 +66,8 @@ class date():
                 year_value += 365
             
         month_value = 0
-        month_counter = 0
         for i in range(0, self.__month_numb - 1):
-            month_value += self.__correct_year_list()[month_counter]
-            month_counter += 1
+            month_value += self.__correct_year_list()[i]
         
         day_value = self.__day_numb
         
