@@ -10,12 +10,12 @@ import unittest
 import date_module as dm
 
 class TestDate(unittest.TestCase):
-    def test_date_to_day_number(self):
+    def test_total_days(self):
         date_strings = ["010100", "290220", "311299"]
         correct_day_numbs = [1, 7365, 36525]
 
         for i in range(0, len(date_strings)):
-            day_numb = dm.date(date_strings[i]).date_to_day_number()
+            day_numb = dm.date(date_strings[i]).total_days()
             self.assertEqual(day_numb, correct_day_numbs[i])
     
     def test_check_if_string(self):
@@ -43,12 +43,12 @@ class TestDate(unittest.TestCase):
             with self.assertRaises(ValueError):
                 dm.date(s)
 
-    def test_dates_to_days_from_first_date(self):
+    def test_days_from_first_date(self):
         date_strings = ["010120", "050120", "070327"]
         days = []
         for s in date_strings:
             days.append(dm.date(s))
-        days_appart = dm.dates_to_days_from_first_date(days)
+        days_appart = dm.days_from_first_date(days)
         self.assertEqual(days_appart, [0, 4, 2622])
 
 if __name__ == "__main__":
