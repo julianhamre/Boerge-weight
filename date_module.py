@@ -75,8 +75,8 @@ class date():
 
 
 def days_from_first_date(dates):
-    days = []
+    day_numbs = []
     first_date = dates[0].total_days()
     for date in dates:
-        days.append(date.total_days() - first_date)
-    return days
+        day_numbs.append(date.total_days() - first_date)
+    return day_numbs
