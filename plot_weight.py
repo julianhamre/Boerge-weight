@@ -142,17 +142,20 @@ class plot:
         return self.__fig
     
 
-def rewrite_and_upload(plot, message):
-    fig = plot.get_fig()
-    fig.savefig("weight_graph.pdf", format="pdf")
-    os.system(f"cp {plot.get_weight_data_path()} weight_control.txt")               
-    os.system(f"git add weight_graph.pdf; git add weight_control.txt; git commit -m '{message}'; git push")
-    
 def savefig_test(plot):
     fig = plot.get_fig()
     fig.savefig("Graph_test_save.pdf", format="pdf")
 
-def check_and_run():
+def rewrite_plot(plot):
+    fig = plot.get_fig()
+    fig.savefig("weight_graph.pdf", format="pdf")
+
+def rewrite_and_upload(plot, message):
+    rewrite_plot(plot)
+    os.system(f"cp {plot.get_weight_data_path()} weight_control.txt")               
+    os.system(f"git add weight_graph.pdf; git add weight_control.txt; git commit -m '{message}'; git push")
+
+def check_and_commit_new_measurement():
     pl = plot()
     if not is_equal(pl.get_weight_data_path(), "weight_control.txt"):
         plt.show()
@@ -163,6 +166,6 @@ def check_and_run():
         else:
             print("rewrite and upload cancelled")
 
-
 if __name__ == "__main__":
-    check_and_run()
+    check_and_commit_new_measurement()
+
