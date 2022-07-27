@@ -43,12 +43,6 @@ class TestDate(unittest.TestCase):
             with self.assertRaises(ValueError):
                 dm.date(s)
 
-    def test_correct_year_list(self):
-        d = dm.date("100115")
-        self.assertEqual(d.correct_year_list(), d.year_list)
-        d = dm.date("100116")
-        self.assertEqual(d.correct_year_list(), d.leap_year_list)
-
     def test_dates_to_days_from_first_date(self):
         date_strings = ["010120", "050120", "070327"]
         days = []
