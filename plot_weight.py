@@ -113,7 +113,7 @@ class plot:
     
             self.__first_date = x[0]
             
-        x = dm.dates_to_days_from_first_date(x)
+        x = dm.days_from_first_date(x)
         if not self.__is_sorted(x):
             raise ValueError("dates are not in chronological order")
 
