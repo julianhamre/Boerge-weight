@@ -6,6 +6,8 @@ Created on Wed Mar 16 19:01:46 2022
 @author: julianhamre
 """
 from matplotlib import pyplot as plt
+import matplotlib.offsetbox as offsetbox
+
 import numpy as np
 import copy
 import sys 
@@ -112,6 +114,7 @@ class plot:
                     y.append(float(data[1]))
     
             self.__first_date = x[0]
+            self.__current_date = x[-1]
             
         x = dm.days_from_first_date(x)
         if not self.__is_sorted(x):
@@ -125,18 +128,26 @@ class plot:
         self.__ax.set_xlabel(f"days after {self.__first_date.get_full_format()}")
         self.__ax.set_ylabel("weight in kg")
         self.__ax.title.set_text("Børge's weight graph")
-        self.__ax.set_ylim(75, 78)
+        self.__ax.set_ylim(74.8, 78)
     
     def __plot_data_graph(self):
-        self.__ax.plot(self.__x, self.__y, linewidth=3, label="Weight graph")
+        self.__ax.plot(self.__x, self.__y, linewidth=2, label="Weight graph")
     
     def __plot_trend_elements(self):
         tr = trend(self.__x, self.__y)
         line_points = tr.get_line_points()
         self.__ax.plot(line_points[0], line_points[1], label=f"Trend polynomial, deg. {tr.get_poly_degree()}")
         
-        text = self.__ax.text(0, 75.23, tr.expected_weight_information())
-        text.set_bbox(dict(facecolor=[1, 0.6, 0], alpha=0.7))
+        current_weight = f"Current weight is {round(tr.current_weight(), 1)}\nkg on {self.__current_date.get_full_format()}"
+        box1 = offsetbox.AnchoredText(current_weight, loc=1)
+        box1.patch.set(color=[1, 0.6, 0], alpha=0.8)
+        
+        expected_weight = tr.expected_weight_information()
+        box2 = offsetbox.AnchoredText(expected_weight, loc=3)
+        box2.patch.set(color=[1, 0.6, 0], alpha=0.8)
+        
+        self.__ax.add_artist(box2)
+        self.__ax.add_artist(box1)
         
     def get_fig(self):
         return self.__fig
