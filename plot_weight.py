@@ -131,23 +131,25 @@ class plot:
         self.__ax.set_ylim(74.8, 78)
     
     def __plot_data_graph(self):
-        self.__ax.plot(self.__x, self.__y, linewidth=2, label="Weight graph")
+        self.__ax.plot(self.__x, self.__y, color="lightskyblue", linewidth=2, label="Weight graph")
+    
+    def __add_text_box(self, text, corner):
+        box_color = "lightsteelblue"
+        box = offsetbox.AnchoredText(text, loc=corner)
+        box.patch.set(color=box_color, alpha=0.8)
+        self.__ax.add_artist(box)
     
     def __plot_trend_elements(self):
+        graph_color = "royalblue"
+        
         tr = trend(self.__x, self.__y)
         line_points = tr.get_line_points()
-        self.__ax.plot(line_points[0], line_points[1], label=f"Trend polynomial, deg. {tr.get_poly_degree()}")
+        self.__ax.plot(line_points[0], line_points[1], color=graph_color, label=f"Trend polynomial, deg. {tr.get_poly_degree()}")
         
         current_weight = f"Current weight is {round(tr.current_weight(), 1)}\nkg on {self.__current_date.get_full_format()}"
-        box1 = offsetbox.AnchoredText(current_weight, loc=1)
-        box1.patch.set(color=[1, 0.6, 0], alpha=0.8)
-        
         expected_weight = tr.expected_weight_information()
-        box2 = offsetbox.AnchoredText(expected_weight, loc=3)
-        box2.patch.set(color=[1, 0.6, 0], alpha=0.8)
-        
-        self.__ax.add_artist(box2)
-        self.__ax.add_artist(box1)
+        self.__add_text_box(current_weight, 1)
+        self.__add_text_box(expected_weight, 3)
         
     def get_fig(self):
         return self.__fig
@@ -155,7 +157,7 @@ class plot:
 
 def savefig_test(plot):
     fig = plot.get_fig()
-    fig.savefig("Graph_test_save.pdf", format="pdf")
+    fig.savefig("graph_test_save.pdf", format="pdf")
 
 def rewrite_plot(plot):
     fig = plot.get_fig()
