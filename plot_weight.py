@@ -49,7 +49,7 @@ class trend:
     
     def __init__(self, x_values, y_values):
         self.__line_x = np.linspace(x_values[0], x_values[-1], 1000)
-        self.__degree = 2
+        self.__degree = 3
         self.__poly = pt.polynomial(np.polyfit(x_values, y_values, self.__degree).tolist())
     
     def get_poly_degree(self):
@@ -128,7 +128,7 @@ class plot:
         self.__ax.set_xlabel(f"days after {self.__first_date.get_full_format()}")
         self.__ax.set_ylabel("weight in kg")
         self.__ax.title.set_text("Børge's weight graph")
-        self.__ax.set_ylim(74.8, 78)
+        self.__ax.set_ylim(74, 78)
     
     def __plot_data_graph(self):
         self.__ax.plot(self.__x, self.__y, color="lightskyblue", linewidth=2, label="Weight graph")
@@ -149,7 +149,7 @@ class plot:
         current_weight = f"Current weight is {round(tr.current_weight(), 1)}\nkg on {self.__current_date.get_full_format()}"
         expected_weight = tr.expected_weight_information()
         self.__add_text_box(current_weight, 1)
-        self.__add_text_box(expected_weight, 3)
+        #self.__add_text_box(expected_weight, 3) "temporary removal until adapted to reg poly degree 3"
         
     def get_fig(self):
         return self.__fig
