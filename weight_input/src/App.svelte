@@ -1,5 +1,24 @@
 <script>
-    let raw_date = "";
+    function today() {
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, "0");
+        let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+        let yyyy = today.getFullYear();
+
+        return yyyy + "-" + mm + "-" + dd;
+    }
+
+    function to_ddmmyy(raw_date) {
+        let split_string = raw_date.split(/[-,]+/);
+        split_string = split_string.reverse();
+        let string = split_string.join("");
+        let ddmmyy = string.slice(0, 4) + string.slice(6);
+
+        return ddmmyy;
+    }
+
+    let raw_date = today();
+    $: ddmmyy = to_ddmmyy(raw_date);
     let weight = 75;
 </script>
 
