@@ -1,0 +1,12 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    zoom: 2;
+}
+
+.select_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
