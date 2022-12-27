@@ -97,7 +97,7 @@ class plot:
         self.__set_layout()
         self.__plot_data_graph()
         self.__plot_trend_elements()
-        self.__ax.legend(loc="upper left")
+        self.__ax.legend(loc="lower left")
     
     def __is_sorted(self, numbs):
         return all(numbs[i] <= numbs[i+1] for i in range(len(numbs) - 1))
@@ -128,10 +128,9 @@ class plot:
         self.__ax.set_xlabel(f"days after {self.__first_date.get_full_format()}")
         self.__ax.set_ylabel("weight in kg")
         self.__ax.title.set_text("Børge's weight graph")
-        self.__ax.set_ylim(74, 78)
     
     def __plot_data_graph(self):
-        self.__ax.plot(self.__x, self.__y, color="lightskyblue", linewidth=2, label="Weight graph")
+        self.__ax.plot(self.__x, self.__y, color="lightskyblue", linewidth=1.5, label="Weight graph")
     
     def __add_text_box(self, text, corner):
         box_color = "lightsteelblue"
@@ -147,7 +146,7 @@ class plot:
         self.__ax.plot(line_points[0], line_points[1], color=graph_color, label=f"Trend polynomial, deg. {tr.get_poly_degree()}")
         
         current_weight = f"Current weight is {round(tr.current_weight(), 1)}\nkg on {self.__current_date.get_full_format()}"
-        expected_weight = tr.expected_weight_information()
+        #expected_weight = tr.expected_weight_information()
         self.__add_text_box(current_weight, 1)
         #self.__add_text_box(expected_weight, 3) "temporary removal until adapted to reg poly degree 3"
         
