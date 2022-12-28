@@ -9,10 +9,10 @@
     }
 
     function to_ddmmyy(raw_date) {
-        let split_string = raw_date.split(/[-,]+/);
+        let split_string = raw_date.split("-");
         split_string = split_string.reverse();
-        let string = split_string.join("");
-        let ddmmyy = string.slice(0, 4) + string.slice(6);
+        let ddmmyyyy = split_string.join("");
+        let ddmmyy = ddmmyyyy.slice(0, 4) + ddmmyyyy.slice(6);
 
         return ddmmyy;
     }
